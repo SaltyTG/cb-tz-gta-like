@@ -16,6 +16,9 @@ public class CarInteraction : MonoBehaviour
     [SerializeField] private KeyCode interactionKey = KeyCode.F;
     [SerializeField] private float enterDistance = 3.5f;
 
+    [Header("Навигация")]
+    [SerializeField] private SplineCheckpointTracker routeTracker;
+
     private Rigidbody carRigidbody;
     private bool isInsideCar = false;
 
@@ -69,6 +72,11 @@ public class CarInteraction : MonoBehaviour
         // Включаем автомобиль
         if (carController != null) carController.enabled = true;
         if (carCamera != null) carCamera.SetActive(true);
+
+        if (routeTracker != null)
+        {
+            routeTracker.SetTrackerTarget(transform);
+        }
     }
 
     private void ExitCar()
@@ -95,5 +103,10 @@ public class CarInteraction : MonoBehaviour
         playerObject.SetActive(true);
         if (playerCharacterController != null) playerCharacterController.enabled = true;
         if (playerCamera != null) playerCamera.SetActive(true);
+
+        if (routeTracker != null && playerObject != null)
+        {
+            routeTracker.SetTrackerTarget(playerObject.transform);
+        }
     }
 }
