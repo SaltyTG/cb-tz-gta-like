@@ -27,15 +27,6 @@ public class PrometeoEditor : Editor{
   private SerializedProperty bodyMassCenter;
   //
   //
-  //CUSTOM MODIFICATION: RECOVERY SYSTEM 
-  //
-  //
-  private SerializedProperty recoveryKey;
-  private SerializedProperty recoveryHeightOffset;
-  private SerializedProperty recoveryColdown;
-  private SerializedProperty autoRecoveryDelay;
-  //
-  //
   //WHEELS VARIABLES
   //
   //
@@ -98,11 +89,6 @@ public class PrometeoEditor : Editor{
     handbrakeDriftMultiplier = SO.FindProperty("handbrakeDriftMultiplier");
     bodyMassCenter = SO.FindProperty("bodyMassCenter");
 
-    recoveryKey = serializedObject.FindProperty("recoveryKey");
-    recoveryHeightOffset = serializedObject.FindProperty("recoveryHeightOffset");
-    recoveryColdown = serializedObject.FindProperty("recoveryColdown");
-    autoRecoveryDelay = serializedObject.FindProperty("autoRecoveryDelay");
-
     frontLeftMesh = SO.FindProperty("frontLeftMesh");
     frontLeftCollider = SO.FindProperty("frontLeftCollider");
     frontRightMesh = SO.FindProperty("frontRightMesh");
@@ -157,17 +143,6 @@ public class PrometeoEditor : Editor{
     handbrakeDriftMultiplier.intValue = EditorGUILayout.IntSlider("Drift Multiplier:", handbrakeDriftMultiplier.intValue, 1, 10);
     EditorGUILayout.PropertyField(bodyMassCenter, new GUIContent("Mass Center of Car: "));
 
-    //
-    //
-    //CUSTOM MODIFICATION: RECOVERY SYSTEM
-    //
-    //
-    EditorGUILayout.Space(20);
-    EditorGUILayout.LabelField("CUSTOM MODIFICATION: RECOVERY SYSTEM", EditorStyles.boldLabel);
-    EditorGUILayout.PropertyField(recoveryKey);
-    EditorGUILayout.PropertyField(recoveryColdown);
-    EditorGUILayout.PropertyField(recoveryHeightOffset);
-    EditorGUILayout.PropertyField(autoRecoveryDelay);
     //
     //
     //WHEELS

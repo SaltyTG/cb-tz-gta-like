@@ -45,19 +45,6 @@ public class PrometeoCarController : MonoBehaviour
                                     // in the points x = 0 and z = 0 of your car. You can select the value that you want in the y axis,
                                     // however, you must notice that the higher this value is, the more unstable the car becomes.
                                     // Usually the y value goes from 0 to 1.5.
-      [Space(10)]
-      //[Header("CUSTOM MODIFICATION: RECOVERY SYSTEM")]
-      [Tooltip("Клавиша для принудительного сброса/переворота машины на колеса")]
-      public KeyCode recoveryKey = KeyCode.R;
-      [Tooltip("Высота подъема машины при восстановлении над землей")]
-      public float recoveryHeightOffset = 1.5f;
-      [Tooltip("Задержка перед повторным срабатыванием нажатия клавиши")]
-      public float recoveryColdown = 3.0f;
-      [Tooltip("Время нахождения на крыше в секундах до авто-восстановления (0 = отключено)")]
-      public float autoRecoveryDelay = 3.0f;
-      private float flippedTimer = 0f;
-      private float lastRecoveryTime = -3.0f;
-      
 
     //WHEELS
 
@@ -381,7 +368,6 @@ public class PrometeoCarController : MonoBehaviour
 
       // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
       AnimateWheelMeshes();
-      HandleVehicleRecovery();
 
     }
 
@@ -783,49 +769,6 @@ public class PrometeoCarController : MonoBehaviour
 
         driftingAxis = 0f;
       }
-    }
-    // CUSTOM MODIFICATION: RECOVERY SYSTEM
-    private void HandleVehicleRecovery()
-    {
-        // Восстановление по нажатию клавиши
-        if (Input.GetKeyDown(recoveryKey))
-        {
-            if (Time.time >= lastRecoveryTime + recoveryColdown)
-            {
-                lastRecoveryTime = Time.time;
-                ResetVehicleOrientation();
-                return;
-            }
-        }
-
-        // Автоматическая система переворота ТС
-        bool isFlipped = Vector3.Dot(transform.up, Vector3.up) < 0.2f;
-
-        // Переворот по таймеру + если машина перевернута и не двигается
-        if (isFlipped && carRigidbody.linearVelocity.magnitude < 1.0f)
-        {
-            flippedTimer += Time.deltaTime;
-            if (autoRecoveryDelay > 0f && flippedTimer >= autoRecoveryDelay)
-            {
-                ResetVehicleOrientation();
-                flippedTimer = 0f;
-            }
-        }
-        else
-        {
-            flippedTimer = 0f;
-        }
-    }
-
-    private void ResetVehicleOrientation()
-    {
-        // Скорость авто приравниваем к 0, сбрасываем вращение и оставляем только направление + поднимаем
-        // авто на указанную высоту что-бы небыло конфликта с коллайдерами земли
-        carRigidbody.linearVelocity = Vector3.zero;
-        carRigidbody.angularVelocity = Vector3.zero;
-        Vector3 currentEuler = transform.rotation.eulerAngles;
-        transform.rotation = Quaternion.Euler(0f, currentEuler.y, 0f);
-        transform.position += Vector3.up * recoveryHeightOffset;
     }
 
 }
